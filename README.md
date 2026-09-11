@@ -305,11 +305,6 @@ npm run build && npm run start:prod
 - 生产建议配置 `FLINT_PUBLIC_BASE_URL`(HTTPS)与 `FLINT_MCP_AUTH_TOKEN`;
 - 多副本部署请把 `FLINT_ARTIFACT_STORE` 设为 `s3`,不要依赖本地磁盘。
 
-**离线 Windows**
-
-见仓库根目录《离线部署操作手册.md》;一键打包脚本为
-`../scripts/build-offline-win.sh`(自动按 win32 目标安装依赖并体检平台二进制)。
-
 ---
 
 ## 常见问题
@@ -335,3 +330,11 @@ npm run build && npm run start:prod
 - 主题只映射视觉 token,布局/几何仍由各后端自己的布局引擎决定。
 
 ---
+
+
+## 接入qwenpaw
+
+![image](output/artifacts/image.png)
+
+![98312a5ec9fe0647a799d0c338e187e7](output/artifacts/98312a5ec9fe0647a799d0c338e187e7.jpg)
+
