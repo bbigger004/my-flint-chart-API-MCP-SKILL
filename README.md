@@ -6,9 +6,9 @@ Flint 后端把一份**语义化图表描述**(`ChartAssemblyInput`)编译成 5 
 
 一句话:**输入是"画什么"(数据 + 语义 + 图表意图),输出是"能直接看的图"或"可交付的产物链接"。**
 
-![系统拓扑](../output/flint-architecture/diagrams/01-system-topology.png)
+![系统拓扑](./docs/images/01-system-topology.png)
 
-> 架构素材位于 `../output/flint-architecture/diagrams/`(系统拓扑 / 编译时序 / 编译管线 / 模块地图)。
+> 图与可编辑源文件都在本目录 [`docs/`](./docs/)(系统拓扑 / 编译时序 / 编译管线 / 模块地图)。
 
 ---
 
@@ -98,7 +98,7 @@ Artifact delivery: url | store: fs(./output/artifacts) | ttl: 604800s | auth: of
 
 后端命名两套写法都接受:`vegalite` / `vega-lite`、`chartjs` / `chart.js`。
 
-![编译时序](../output/flint-architecture/diagrams/02-compile-sequence.png)
+![编译时序](./docs/images/02-compile-sequence.png)
 
 ### 渲染示例
 
@@ -167,7 +167,7 @@ curl -X POST http://localhost:3000/api/flint/render \
 
 ## 渲染管线
 
-![编译管线](../output/flint-architecture/diagrams/03-compiler-pipeline.png)
+![编译管线](./docs/images/03-compiler-pipeline.png)
 
 1. **校验**:数据必须是内联 `data.values`(HTTP 服务不读服务器本地文件)、
    行数 ≤ 10 万、单元格必须是标量、`baseSize/canvasSize` 必须是 1–4000 的数字。
@@ -194,11 +194,16 @@ curl -X POST http://localhost:3000/api/flint/render \
 主题 token 从 Flint 的 ThemeSpec 的 `ink` / `type` 中解析,
 支持预设 id、`{ extends, ...覆盖 }` 与完全自定义三种写法。
 
+![主题对比(精选)](./docs/images/theme-gallery-hero.png)
+
+> 完整图册(3 后端 × 10 主题)见 [../examples/theme-gallery/index.html](../examples/theme-gallery/index.html),
+> 重新生成:`node scripts/generate-theme-gallery.js`。
+
 ---
 
 ## 目录结构
 
-![仓库模块地图](../output/flint-architecture/diagrams/04-repo-module-map.png)
+![仓库模块地图](./docs/images/04-repo-module-map.png)
 
 ```text
 src/
@@ -235,6 +240,9 @@ assets/
 └── skills/                       # agent 编写图表/主题的规范(MCP 资源)
 skill-flint-chart/                # 可选的 agent skill(让 agent 把图直接贴进回复)
 scripts/generate-theme-gallery.js # 生成 3 后端 × 10 主题对比图册
+docs/
+├── images/                       # README 用图:4 张架构图 + 主题对比图
+└── diagrams/                     # 架构图的可编辑 HTML 源文件与截图脚本
 ```
 
 ---
@@ -327,4 +335,3 @@ npm run build && npm run start:prod
 - 主题只映射视觉 token,布局/几何仍由各后端自己的布局引擎决定。
 
 ---
-

@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>一次图表编译的请求时序</title>
+  <style>
+    :root {
+      --bg: #0a0f1a;
+      --panel: #101a2b;
+      --line: #2c3c5a;
+      --line-soft: #1d2a42;
+      --ink: #e9f1fb;
+      --muted: #92a4bd;
+      --cyan: #4cc3ff;
+      --lime: #b8ef61;
+      --amber: #ffc966;
+      --mono: "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, monospace;
+      --sans: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; width: 1920px; height: 1080px; overflow: hidden;
+      background: var(--bg); color: var(--ink); font-family: var(--sans); }
+    svg { display: block; }
+    .kicker { fill: var(--muted); font-family: var(--mono); font-size: 22px; letter-spacing: .22em; }
+    .h1 { fill: var(--ink); font-size: 50px; font-weight: 800; }
+    .sub { fill: var(--muted); font-size: 22px; }
+    .box { fill: var(--panel); stroke: var(--line); }
+    .box-head { fill: var(--cyan); }
+    .head-label { fill: #0a0f1a; font-weight: 800; }
+    .life { stroke: var(--line); stroke-width: 2; stroke-dasharray: 5 9; }
+    .msg { stroke: var(--cyan); stroke-width: 3; fill: none; }
+    .msg-return { stroke: var(--lime); stroke-width: 3; stroke-dasharray: 8 8; fill: none; }
+    .num { fill: var(--amber); font-family: var(--mono); font-size: 20px; font-weight: 700; }
+    .msg-text { fill: var(--ink); font-size: 21px; }
+    .msg-code { fill: var(--lime); font-family: var(--mono); font-size: 19px; }
+    .note { fill: var(--panel); stroke: var(--line); }
+    .note-text { fill: var(--muted); font-size: 19px; }
+    .label-sm { fill: var(--muted); font-size: 18px; }
+  </style>
+</head>
+<body>
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" role="img" aria-label="一次图表编译请求的时序图">
+  <defs>
+    <marker id="m" markerWidth="13" markerHeight="13" refX="9" refY="6.5" orient="auto">
+      <path d="M0,0 L13,6.5 L0,13 z" fill="#4cc3ff"/>
+    </marker>
+    <marker id="mr" markerWidth="13" markerHeight="13" refX="9" refY="6.5" orient="auto">
+      <path d="M0,0 L13,6.5 L0,13 z" fill="#b8ef61"/>
+    </marker>
+  </defs>
+
+  <text x="80" y="88" class="kicker">REQUEST SEQUENCE / POST /API/FLINT/COMPILE</text>
+  <text x="80" y="152" class="h1">一次图表编译：从 Vue 点击到浏览器出图</text>
+  <text x="80" y="202" class="sub">编译是有状态服务内的纯函数调用：控制器保持薄，业务封装在后端服务，视觉工程交给 flint-chart 核心</text>
+
+  <!-- 参与者 -->
+  <g>
+    <rect x="120" y="262" width="240" height="78" rx="12" class="box"/>
+    <text x="240" y="312" text-anchor="middle" class="head-label">Vue3 · ChartCard</text>
+  </g>
+  <g>
+    <rect x="500" y="262" width="240" height="78" rx="12" class="box"/>
+    <text x="620" y="312" text-anchor="middle" class="head-label">NestJS Controller</text>
+  </g>
+  <g>
+    <rect x="870" y="262" width="250" height="78" rx="12" class="box"/>
+    <text x="995" y="312" text-anchor="middle" class="head-label">FlintService</text>
+  </g>
+  <g>
+    <rect x="1240" y="262" width="260" height="78" rx="12" class="box"/>
+    <text x="1370" y="312" text-anchor="middle" class="head-label">flint-chart 核心</text>
+  </g>
+  <g>
+    <rect x="1580" y="262" width="240" height="78" rx="12" class="box"/>
+    <text x="1700" y="312" text-anchor="middle" class="head-label">渲染库 / 页面</text>
+  </g>
+
+  <!-- 生命线 -->
+  <line x1="240" y1="340" x2="240" y2="990" class="life"/>
+  <line x1="620" y1="340" x2="620" y2="990" class="life"/>
+  <line x1="995" y1="340" x2="995" y2="990" class="life"/>
+  <line x1="1370" y1="340" x2="1370" y2="990" class="life"/>
+  <line x1="1700" y1="340" x2="1700" y2="990" class="life"/>
+
+  <!-- 1 请求 -->
+  <text x="18" y="428" class="num">01</text>
+  <path d="M240 400 L620 400" class="msg" marker-end="url(#m)"/>
+  <text x="300" y="392" class="msg-code">POST /api/flint/compile</text>
+  <text x="300" y="424" class="msg-text">ChartAssemblyInput + backend（vega-lite 等）</text>
+
+  <!-- 2 DTO -->
+  <text x="18" y="502" class="num">02</text>
+  <path d="M620 474 L995 474" class="msg" marker-end="url(#m)"/>
+  <text x="655" y="466" class="msg-code">ValidationPipe + DTO</text>
+  <text x="655" y="498" class="msg-text">顶层校验 input 对象与 backend 枚举</text>
+
+  <!-- 3 service dispatch -->
+  <text x="18" y="576" class="num">03</text>
+  <path d="M995 548 L995 548" class="msg" marker-end="url(#m)"/>
+  <text x="1008" y="540" class="msg-code">COMPILERS[backend].assemble(input)</text>
+  <text x="1008" y="572" class="msg-text">按后端分发，错误统一转 400</text>
+
+  <!-- 4 core -->
+  <text x="18" y="650" class="num">04</text>
+  <path d="M995 622 L1370 622" class="msg" marker-end="url(#m)"/>
+  <text x="1040" y="614" class="msg-code">语义解析 → 布局/主题决策 → spec 生成</text>
+
+  <!-- core annotation -->
+  <rect x="1240" y="650" width="300" height="110" rx="12" class="note"/>
+  <text x="1262" y="680" class="msg-text">内部处理</text>
+  <text x="1262" y="710" class="label-sm">resolve-semantics / type-registry</text>
+  <text x="1262" y="734" class="label-sm">axis-detection / layout / theme</text>
+  <text x="1262" y="752" class="label-sm mono">filter-overflow → _warnings</text>
+
+  <!-- 5 return -->
+  <text x="18" y="826" class="num">05</text>
+  <path d="M1370 798 L995 798" class="msg-return" marker-end="url(#mr)"/>
+  <text x="1040" y="790" class="msg-code">Vega-Lite / ECharts / … 原生 spec</text>
+
+  <text x="18" y="900" class="num">06</text>
+  <path d="M995 872 L620 872" class="msg-return" marker-end="url(#mr)"/>
+  <text x="655" y="864" class="msg-code">{ backend, compiler, spec, warnings }</text>
+
+  <text x="18" y="974" class="num">07</text>
+  <path d="M620 946 L240 946" class="msg-return" marker-end="url(#mr)"/>
+  <text x="300" y="938" class="msg-code">200 OK · spec JSON</text>
+
+  <text x="18" y="1048" class="num">08</text>
+  <path d="M240 1020 L1700 1020" class="msg" marker-end="url(#m)"/>
+  <text x="320" y="1012" class="msg-code">ChartRenderer 用 vega/echarts/chart.js/plotly 渲染</text>
+  <text x="320" y="1044" class="msg-text">请求体与响应体 JSON 同步展示，便于对照</text>
+
+  <text x="1490" y="1048" class="label-sm">Excel 产物则供 Office/下载编辑</text>
+</svg>
+</body>
+</html>

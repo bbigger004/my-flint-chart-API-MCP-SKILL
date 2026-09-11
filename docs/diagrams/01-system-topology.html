@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>Flint 系统拓扑</title>
+  <style>
+    :root {
+      --bg: #0a0f1a;
+      --panel: #101a2b;
+      --panel-2: #0c1424;
+      --line: #26334d;
+      --line-soft: #1d2a42;
+      --ink: #e9f1fb;
+      --muted: #92a4bd;
+      --cyan: #4cc3ff;
+      --lime: #b8ef61;
+      --amber: #ffc966;
+      --rose: #ff7d8f;
+      --mono: "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, monospace;
+      --sans: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; width: 1920px; height: 1080px; overflow: hidden;
+      background: var(--bg); color: var(--ink); font-family: var(--sans); }
+    svg { display: block; }
+    .panel { fill: var(--panel); stroke: var(--line); }
+    .panel-soft { fill: var(--panel-2); stroke: var(--line-soft); }
+    .kicker { fill: var(--muted); font-family: var(--mono); font-size: 22px; letter-spacing: .22em; }
+    .h1 { fill: var(--ink); font-size: 54px; font-weight: 800; letter-spacing: -.01em; }
+    .h2 { fill: var(--ink); font-size: 24px; font-weight: 700; }
+    .sub { fill: var(--muted); font-size: 22px; }
+    .label { fill: var(--ink); font-size: 21px; font-weight: 600; }
+    .label-sm { fill: var(--muted); font-size: 17px; }
+    .mono { font-family: var(--mono); }
+    .cyan { fill: var(--cyan); }
+    .lime { fill: var(--lime); }
+    .amber { fill: var(--amber); }
+    .rose { fill: var(--rose); }
+    .arrow { stroke: var(--cyan); stroke-width: 3; fill: none; }
+    .arrow-lime { stroke: var(--lime); stroke-width: 3; fill: none; }
+    .dashed { stroke: var(--line); stroke-width: 3; stroke-dasharray: 10 12; fill: none; }
+    .legend { fill: var(--muted); font-size: 17px; }
+  </style>
+</head>
+<body>
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" role="img" aria-label="Flint 架构总览拓扑图">
+  <defs>
+    <marker id="a" markerWidth="14" markerHeight="14" refX="10" refY="7" orient="auto">
+      <path d="M0,0 L14,7 L0,14 z" fill="#4cc3ff"/>
+    </marker>
+    <marker id="al" markerWidth="14" markerHeight="14" refX="10" refY="7" orient="auto">
+      <path d="M0,0 L14,7 L0,14 z" fill="#b8ef61"/>
+    </marker>
+  </defs>
+
+  <text x="80" y="92" class="kicker">SYSTEM TOPOLOGY / FLINT-ARCHITECTURE</text>
+  <text x="80" y="158" class="h1">Flint 架构总览：一份语义 spec，贯通接入层与渲染层</text>
+  <text x="80" y="210" class="sub">前端与 Agent 只描述意图，NestJS 收敛编译，Flint 核心负责把意图变成各后端原生 spec</text>
+
+  <!-- 左侧：接入与渲染 -->
+  <g>
+    <rect x="80" y="290" width="430" height="700" rx="18" class="panel"/>
+    <text x="112" y="332" class="h2 cyan">01 接入与使用方</text>
+
+    <rect x="112" y="370" width="366" height="120" rx="14" class="panel-soft"/>
+    <text x="140" y="410" class="label">Vue3 前端（localhost:5173）</text>
+    <text x="140" y="442" class="label-sm mono">ChartCard → POST /api/flint/compile</text>
+    <text x="140" y="470" class="label-sm">组装 data + semantic_types + chart_spec</text>
+
+    <rect x="112" y="520" width="366" height="112" rx="14" class="panel-soft"/>
+    <text x="140" y="560" class="label">Agent / MCP 客户端</text>
+    <text x="140" y="592" class="label-sm mono">Claude / Cursor / VS Code</text>
+    <text x="140" y="618" class="label-sm">flint-chart-mcp · 本地或托管 HTTP</text>
+
+    <rect x="112" y="660" width="366" height="150" rx="14" class="panel-soft"/>
+    <text x="140" y="700" class="label">浏览器渲染库</text>
+    <text x="140" y="730" class="label-sm">接收原生 spec 并出图，不参与编译</text>
+    <text x="140" y="762" class="label-sm mono">vega · echarts · chart.js · plotly</text>
+    <text x="140" y="790" class="label-sm mono">Excel 产物供 Office 打开编辑</text>
+  </g>
+
+  <!-- 中间：后端 + 核心 -->
+  <g>
+    <rect x="600" y="290" width="600" height="700" rx="18" class="panel"/>
+    <text x="632" y="332" class="h2 lime">02 编译服务（本仓库 backend/）</text>
+
+    <rect x="632" y="366" width="536" height="150" rx="14" class="panel-soft"/>
+    <text x="660" y="406" class="label">NestJS · flint.service</text>
+    <text x="660" y="438" class="label-sm mono">POST /api/flint/compile</text>
+    <text x="660" y="466" class="label-sm mono">GET /api/flint/templates · /themes</text>
+    <text x="660" y="494" class="label-sm">校验请求 → 选择 assemble* → 返回 { compiler, spec, warnings }</text>
+
+    <rect x="632" y="546" width="536" height="200" rx="14" class="panel-soft"/>
+    <text x="660" y="586" class="label">flint-chart 核心（repo/packages/flint-js）</text>
+    <text x="660" y="618" class="label-sm">语义类型识别与解析</text>
+    <text x="660" y="646" class="label-sm">模板注册表 · 通道校验 · 布局决策</text>
+    <text x="660" y="674" class="label-sm">刻度/轴/格式化/配色/溢出保护</text>
+    <text x="660" y="702" class="label-sm">ThemeSpec 主题引擎（10 预设 + 自定义）</text>
+    <text x="660" y="730" class="label-sm mono">assembleVegaLite · assembleECharts · assembleChartjs · assemblePlotly · assembleExcel</text>
+
+    <rect x="632" y="776" width="536" height="180" rx="14" class="panel-soft"/>
+    <text x="660" y="816" class="label">MCP 服务（repo/packages/flint-mcp）</text>
+    <text x="660" y="848" class="label-sm">Agent 工具：创建 / 校验 / 渲染图表</text>
+    <text x="660" y="876" class="label-sm">npx -y flint-chart-mcp 或托管 HTTP</text>
+    <text x="660" y="904" class="label-sm">本地数据文件无需上传第三方</text>
+    <text x="660" y="932" class="label-sm mono">https://flint.data-formulator.ai/mcp</text>
+  </g>
+
+  <!-- 右侧：输出 -->
+  <g>
+    <rect x="1290" y="290" width="550" height="700" rx="18" class="panel"/>
+    <text x="1322" y="332" class="h2 amber">03 输出与渲染</text>
+
+    <rect x="1322" y="366" width="486" height="104" rx="14" class="panel-soft"/>
+    <text x="1350" y="404" class="label">同一 ChartAssemblyInput</text>
+    <text x="1350" y="436" class="label-sm">不换输入换函数，即得目标库原生 spec</text>
+
+    <rect x="1322" y="498" width="486" height="292" rx="14" class="panel-soft"/>
+    <text x="1350" y="538" class="label mono">vega-lite · 主题最完整</text>
+    <text x="1350" y="576" class="label mono">echarts · 37 个模板</text>
+    <text x="1350" y="614" class="label mono">chart.js · 轻量</text>
+    <text x="1350" y="652" class="label mono">plotly · 38 个模板</text>
+    <text x="1350" y="690" class="label mono">excel · 18 个原生可编辑图表</text>
+    <text x="1350" y="726" class="label-sm">去重后约 48 个图表模板名</text>
+    <text x="1350" y="754" class="label-sm">+ _warnings 溢出/截断提示</text>
+    <text x="1350" y="778" class="label-sm">+ 10 套视觉主题预设</text>
+
+    <rect x="1322" y="820" width="486" height="136" rx="14" class="panel-soft"/>
+    <text x="1350" y="860" class="label">消费方</text>
+    <text x="1350" y="892" class="label-sm">前端渲染库 · Office/Excel · 文档与报告</text>
+    <text x="1350" y="920" class="label-sm">多个客户端可复用同一编译服务</text>
+  </g>
+
+  <!-- 连接线 -->
+  <path d="M478 588 C 550 588, 540 470, 632 470" class="arrow" marker-end="url(#a)"/>
+  <path d="M600 650 C 520 650, 520 850, 478 850" class="arrow-lime" marker-end="url(#al)"/>
+  <path d="M1136 655 L 1290 610" class="arrow" marker-end="url(#a)"/>
+
+  <text x="80" y="1040" class="legend">▎本地仓库 = backend（NestJS 编译服务）+ frontend（Vue3 渲染层）+ repo/（上游 flint-chart 源码 0.5.1）</text>
+</svg>
+</body>
+</html>

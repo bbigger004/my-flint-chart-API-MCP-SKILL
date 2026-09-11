@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>本仓库模块地图</title>
+  <style>
+    :root {
+      --bg: #0a0f1a;
+      --panel: #101a2b;
+      --panel-2: #0c1424;
+      --line: #2c3c5a;
+      --ink: #e9f1fb;
+      --muted: #92a4bd;
+      --cyan: #4cc3ff;
+      --lime: #b8ef61;
+      --amber: #ffc966;
+      --rose: #ff7d8f;
+      --mono: "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, monospace;
+      --sans: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; width: 1920px; height: 1080px; overflow: hidden;
+      background: var(--bg); color: var(--ink); font-family: var(--sans); }
+    svg { display: block; }
+    .kicker { fill: var(--muted); font-family: var(--mono); font-size: 22px; letter-spacing: .22em; }
+    .h1 { fill: var(--ink); font-size: 52px; font-weight: 800; }
+    .sub { fill: var(--muted); font-size: 22px; }
+    .box { fill: var(--panel); stroke: var(--line); }
+    .box-soft { fill: var(--panel-2); stroke: var(--line); }
+    .h2 { fill: var(--ink); font-size: 25px; font-weight: 800; }
+    .h3 { fill: var(--ink); font-size: 22px; font-weight: 700; }
+    .text { fill: var(--muted); font-size: 19px; }
+    .code { fill: var(--lime); font-family: var(--mono); font-size: 19px; }
+    .arrow { stroke: var(--cyan); stroke-width: 4; fill: none; }
+    .arrow-soft { stroke: var(--line); stroke-width: 3; fill: none; }
+  </style>
+</head>
+<body>
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" role="img" aria-label="本仓库模块地图">
+  <defs>
+    <marker id="r" markerWidth="14" markerHeight="14" refX="10" refY="7" orient="auto">
+      <path d="M0,0 L14,7 L0,14 z" fill="#4cc3ff"/>
+    </marker>
+  </defs>
+
+  <text x="80" y="90" class="kicker">REPOSITORY MAP / LOCAL WORKSPACE</text>
+  <text x="80" y="154" class="h1">本仓库模块地图：接入工程在上，上游源码在 repo/</text>
+  <text x="80" y="206" class="sub">结构 = 前后端分离接入示例 + microsoft/flint-chart 0.5.1 研究源码 + 学习/汇报笔记</text>
+
+  <!-- 根 -->
+  <rect x="560" y="246" width="800" height="76" rx="16" class="box"/>
+  <text x="960" y="292" text-anchor="middle" class="h2">flint-chart · 本仓库根目录</text>
+
+  <!-- 左列：接入工程 -->
+  <rect x="80" y="370" width="860" height="640" rx="18" class="box"/>
+  <text x="112" y="416" class="h2 cyan">前端 + 后端接入工程</text>
+
+  <rect x="112" y="448" width="400" height="250" rx="14" class="box-soft"/>
+  <text x="136" y="486" class="h3">backend/ · NestJS</text>
+  <text x="136" y="520" class="code">POST /api/flint/compile</text>
+  <text x="136" y="548" class="code">GET /api/flint/templates · themes</text>
+  <text x="136" y="578" class="text">FlintService 包装 5 个 assemble*</text>
+  <text x="136" y="606" class="text">DTO 顶层校验 · 端口 3000</text>
+  <text x="136" y="634" class="text">编译逻辑收敛在后端，便于缓存/审计</text>
+  <text x="136" y="662" class="text">依赖 npm 包 flint-chart</text>
+
+  <rect x="540" y="448" width="376" height="250" rx="14" class="box-soft"/>
+  <text x="564" y="486" class="h3">frontend/ · Vue3 + Vite</text>
+  <text x="564" y="520" class="text">ChartCard：发请求 + 三态 UI + JSON</text>
+  <text x="564" y="548" class="text">ChartRenderer：四种渲染库封装</text>
+  <text x="564" y="576" class="text">CatalogTable：支持矩阵来自后端</text>
+  <text x="564" y="604" class="text">App.vue：五个演示区块编排</text>
+  <text x="564" y="632" class="text">Vite 代理 /api → 3000 · 端口 5173</text>
+
+  <rect x="112" y="726" width="804" height="112" rx="14" class="box-soft"/>
+  <text x="136" y="764" class="h3">demo/ · 旧版单体概念参考</text>
+  <text x="136" y="796" class="text">保留数据与区块演示的原始形态，作为重构对照；当前链路已改为真实 HTTP 编译</text>
+
+  <rect x="112" y="858" width="804" height="120" rx="14" class="box-soft"/>
+  <text x="136" y="896" class="h3">README / 汇报与学习笔记（根目录 md）</text>
+  <text x="136" y="928" class="text">Flint-Agent-汇报材料.md · Flint-项目特点与学习路径.md</text>
+  <text x="136" y="956" class="text">快速开始：backend npm run start:dev + frontend npm run dev 两个终端</text>
+
+  <!-- 右列：上游 repo -->
+  <rect x="980" y="370" width="860" height="640" rx="18" class="box"/>
+  <text x="1012" y="416" class="h2 lime">repo/ · 上游 flint-chart 0.5.1</text>
+
+  <rect x="1012" y="448" width="400" height="180" rx="14" class="box-soft"/>
+  <text x="1036" y="486" class="h3">packages/flint-js</text>
+  <text x="1036" y="520" class="text">npm 包 flint-chart 的源码与单测</text>
+  <text x="1036" y="548" class="text">核心：语义 → 布局 → 后端 spec</text>
+  <text x="1036" y="576" class="text">vegalite / echarts / chartjs / plotly / excel</text>
+
+  <rect x="1440" y="448" width="376" height="180" rx="14" class="box-soft"/>
+  <text x="1464" y="486" class="h3">packages/flint-mcp</text>
+  <text x="1464" y="520" class="text">npm 包 flint-chart-mcp</text>
+  <text x="1464" y="548" class="text">Agent 创建/校验/渲染图表工具</text>
+  <text x="1464" y="576" class="text">本地 stdio 或托管 HTTP</text>
+
+  <rect x="1012" y="656" width="400" height="150" rx="14" class="box-soft"/>
+  <text x="1036" y="694" class="h3">packages/flint-py（源码预览）</text>
+  <text x="1036" y="726" class="text">Python 移植预览，官方说明待发布</text>
+  <text x="1036" y="752" class="text">tools/ + flint/ 目录结构</text>
+
+  <rect x="1440" y="656" width="376" height="150" rx="14" class="box-soft"/>
+  <text x="1464" y="694" class="h3">site/ · 官方站点源码</text>
+  <text x="1464" y="726" class="text">Landing / Editor / Themes / ChartWall</text>
+  <text x="1464" y="752" class="text">AutoLayoutPlayground / MCP 页面</text>
+
+  <rect x="1012" y="830" width="804" height="148" rx="14" class="box-soft"/>
+  <text x="1036" y="868" class="h3">docs / scripts / agent-skills / test-harness / shared</text>
+  <text x="1036" y="900" class="text">api-reference、设计语义、颜色决策、模板教程；主题审计脚本与参考生成</text>
+  <text x="1036" y="928" class="text">agent-skills/flint-chart-author · flint-theme-author；单测覆盖各后端与主题</text>
+  <text x="1036" y="956" class="text">monorepo workspaces：flint-js / flint-mcp / site，根脚本统一 test/lint/build</text>
+
+  <!-- 连线 -->
+  <path d="M960 322 L960 370" class="arrow" marker-end="url(#r)"/>
+  <path d="M960 322 L480 322 L480 370" class="arrow-soft"/>
+  <path d="M1440 322 L1440 370" class="arrow-soft"/>
+  <path d="M312 698 C 220 820, 120 830, 120 858" class="arrow-soft"/>
+
+  <text x="312" y="860" text-anchor="middle" class="text">frontend → HTTP → backend</text>
+  <text x="1008" y="660" class="text">backend npm 依赖 flint-chart</text>
+  <text x="920" y="1040" class="sub" style="font-size:19px">说明：本图展示本仓库当前目录；开发时前端、后端、上游源码都可并行阅读，职责边界按图分区。</text>
+</svg>
+</body>
+</html>
